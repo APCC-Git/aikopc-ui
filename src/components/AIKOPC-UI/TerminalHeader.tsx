@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import TerminalWindow from '@/components/AIKOPC-UI/TerminalWindow';
 import Link from 'next/link';
+import TerminalWindow from '@/components/AIKOPC-UI/TerminalWindow';
+import { AsciiArtComponent } from '@/components/AIKOPC-UI/effect/asciiArt';
 
 type navItemType = {
   label: string;
@@ -52,33 +53,27 @@ export default function TerminalHeader({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  const [currentTime, setCurrentTime] = useState(new Date());
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <header
-      className={`sticky z-50 w-screen transition-all duration-300 ${isHidden ? '-translate-y-full' : 'translate-y-0 top-4'}`}
+      className={`sticky z-50 w-full transition-all duration-300 ${isHidden ? '-translate-y-full' : 'translate-y-0 top-4'}`}
     >
       <div className="px-4 md:px-8 lg:px-16">
         <TerminalWindow
           className={'border-terminal-green'}
           title={'apcc@aikopc.net: ~$'}
           showCurrentTime
-          padding={'px-2 py-1 md:px-4 md:py-3'}
+          padding={'px-2 py-1 md:px-4 md:py-2'}
         >
           <div className="rounded-b-lg px-4 py-3 flex items-center justify-between">
             <div className="flex items-end space-x-1">
-              <span className="text-terminal-green font-mono text-2xl font-bold">AIKOPC.NET</span>
+              <span className="text-terminal-green font-mono text-[8px] leading-1.5 tracking-[-0.1rem]  whitespace-nowrap">
+                <AsciiArtComponent />
+              </span>
               <span className="text-terminal-gray font-mono ml-2 mb-0.5 text-sm">v1.0.0</span>
             </div>
 
-            <div className={'flex items-center space-x-8'}>
-              <nav className="hidden md:flex space-x-6">
+            <div className={'hidden lg:flex items-center space-x-8'}>
+              <nav className="flex space-x-6">
                 {navItem.map((item, index) => (
                   <button
                     key={index}

@@ -25,7 +25,6 @@ export default function TerminalWindow({
 }) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const ref = useRef<HTMLDivElement>(null);
-  const [focusStyle, setFocusStyle] = useState<string>('');
   const [isInCenter, setIsInCenter] = useState(false);
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function TerminalWindow({
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [showCurrentTime]);
 
   useEffect(() => {
     const target = ref.current;
@@ -63,7 +62,7 @@ export default function TerminalWindow({
     return () => {
       observer.unobserve(target);
     };
-  }, [isInCenter]);
+  }, [activeOnFocus, isInCenter, rootMargin, threshold]);
 
   return (
     <div

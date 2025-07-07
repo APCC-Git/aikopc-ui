@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import TerminalWindow from '@/components/AIKOPC-UI/TerminalWindow';
 
 export default function TerminalLoading({ onComplete }: { onComplete?: () => void }) {
@@ -13,7 +13,9 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminalWindowRef = useRef<HTMLDivElement>(null);
 
-  const consoleLines = [
+  // プロセスのログ
+  // パフォーマンス向上の為useMemoを使ってキャッシュする
+  const consoleLines = useMemo(() => [
     { text: '$ sudo pm2 start aikopc', delay: 100 },
     { text: '[INFO] システムを初期化中...', delay: 30 },
     { text: '[INFO] 依存関係を確認中...', delay: 30 },
@@ -32,7 +34,7 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
     { text: '  ✓ components.css', delay: 10 },
     { text: '[SUCCESS] すべてのプロセスが完了しました', delay: 30 },
     { text: '[INFO] ウェブサイトを起動中...', delay: 100 },
-  ];
+  ],[])
 
   // 自動スクロール
   useEffect(() => {
@@ -70,7 +72,7 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [currentLine, currentChar]);
+  }, [currentLine, currentChar, consoleLines]);
 
   // ウインドウサイズ変更時にターミナルのサイズを取得
   useEffect(() => {
@@ -99,7 +101,7 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
         onComplete?.();
       }, 1000);
     }
-  }, [currentLine, onComplete]);
+  }, [consoleLines.length, currentLine, onComplete]);
 
   // Ctrl + C でも onComplete を呼ぶ
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [onComplete]);
 
   // 行の色を取得
   const getLineColor = (text: string) => {
@@ -145,12 +147,6 @@ export default function TerminalLoading({ onComplete }: { onComplete?: () => voi
         ))}
       </div>
       <div className="relative w-full max-w-4xl mx-4">
-        {/* スクロールバー非表示用のスタイル */}
-        <style jsx>{`
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
 
         {/*ウインドウ*/}
         <div ref={terminalWindowRef}>

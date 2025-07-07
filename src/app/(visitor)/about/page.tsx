@@ -1,4 +1,3 @@
-import Homepage from '@/components/HomePage';
 import TerminalWindow from '@/components/AIKOPC-UI/TerminalWindow';
 
 export default function About() {

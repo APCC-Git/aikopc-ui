@@ -26,12 +26,12 @@ letter-spacing: 0em;
 line-height: 1.0;
 `;
 
-export const AsciiArtComponent = () => {
+export const AsciiArtComponent = ({ className = '' }: { className?: string }) => {
   return (
-    <div className={'flex items-center'}>
+    <div className={`flex items-center ${className}`}>
       <pre
         className={
-          'ml-6 bg-gradient-to-r from-terminal-green to-terminal-yellow bg-clip-text text-transparent'
+          'bg-gradient-to-r from-terminal-green to-terminal-yellow bg-clip-text text-transparent '
         }
       >
         {asciiArt}
